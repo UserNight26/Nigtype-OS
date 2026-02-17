@@ -23,19 +23,6 @@ Siga estes passos para gerar o arquivo `.img` que contém todo o sistema:
 
 1. **Limpeza de Build:**
 ´´´
-
-## 📂 Mapa de Arquivos (Project Tree)
-
-
-NigType-OS/
-├── apps/               # Apps nativos (Ex: terminal.cpp)
-├── drivers/            # GUI System (nigtype_gui_system.cpp)
-├── include/            # Definições (nigtype.hpp)
-├── kernel/             # O Núcleo (kernel.cpp)
-├── boot.s              # Entrada do Hardware (Assembly)
-├── linker.ld           # Arquiteto de Memória
-└── Makefile            # O Cérebro da Compilação
-
 ## 🎨 Identidade Visual (NigType-OS Original)
 
 O design deste sistema foi criado para ser disruptivo. Ele utiliza o **Frame System**, que se baseia em:
