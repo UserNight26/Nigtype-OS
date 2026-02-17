@@ -1,37 +1,16 @@
-name: Compilar NigType-OS
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Instalar Compiladores
+- name: Compilar Tudo
         run: |
-          sudo apt-get update
-          sudo apt-get install -y nasm gcc g++ binutils
-
-      - name: Compilar Tudo
-        run: |
-          # 1. Compila o ponto de entrada (Assembly)
+          # 1. Assembly
           nasm -f elf32 boot.asm -o boot.o
           
-          # 2. Compila os arquivos C (Adicionamos o caminho da pasta include)
-          gcc -m32 -c kernel/system.c -I. -o system.o
-          gcc -m32 -c kernel/idt.c -I. -o idt.o
-          gcc -m32 -c kernel/bootlog.c -I. -o bootlog.o
+          # 2. Compilar C (Dizendo que os headers estão na pasta include)
+          gcc -m32 -c kernel/system.c -Iinclude -o system.o
+          gcc -m32 -c kernel/idt.c -Iinclude -o idt.o
+          gcc -m32 -c kernel/bootlog.c -Iinclude -o bootlog.o
           
-          # 3. Compila os arquivos C++
-          g++ -m32 -c kernel/main.cpp -I. -o main.o
-          g++ -m32 -c kernel/kernel_core.cpp -I. -o kernel_core.o
+          # 3. Compilar C++
+          g++ -m32 -c kernel/main.cpp -Iinclude -o main.o
+          g++ -m32 -c kernel/kernel_core.cpp -Iinclude -o kernel_core.o
           
-          # 4. O Linker (Junta tudo no binário final)
+          # 4. Linker (Soldagem final)
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
-
-      - name: Upload do Kernel
-        uses: actions/upload-artifact@v4
-        with:
-          name: NigType-Kernel-Binario
-          path: nigtype.bin
