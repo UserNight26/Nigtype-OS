@@ -15,22 +15,23 @@ jobs:
 
       - name: Compilar Tudo
         run: |
-          # 1. Compila o Assembly (agora como elf32 para aceitar símbolos)
+          # 1. Compila o ponto de entrada (Assembly)
           nasm -f elf32 boot.asm -o boot.o
           
-          # 2. Compila os arquivos C e C++ da pasta kernel
-          gcc -m32 -c kernel/system.c -o system.o
-          gcc -m32 -c kernel/idt.c -o idt.o
-          gcc -m32 -c kernel/bootlog.c -o bootlog.o
-          g++ -m32 -c kernel/main.cpp -o main.o
-          g++ -m32 -c kernel/kernel_core.cpp -o kernel_core.o
+          # 2. Compila os arquivos C (Adicionamos o caminho da pasta include)
+          gcc -m32 -c kernel/system.c -I. -o system.o
+          gcc -m32 -c kernel/idt.c -I. -o idt.o
+          gcc -m32 -c kernel/bootlog.c -I. -o bootlog.o
           
-          # 3. Junta tudo (Linking)
-          # O -Ttext 0x100000 é o padrão para kernels Multiboot
+          # 3. Compila os arquivos C++
+          g++ -m32 -c kernel/main.cpp -I. -o main.o
+          g++ -m32 -c kernel/kernel_core.cpp -I. -o kernel_core.o
+          
+          # 4. O Linker (Junta tudo no binário final)
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
 
-      - name: Upload do Resultado
+      - name: Upload do Kernel
         uses: actions/upload-artifact@v4
         with:
-          name: NigType-OS-Binary
+          name: NigType-Kernel-Binario
           path: nigtype.bin
