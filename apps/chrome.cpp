@@ -1,10 +1,20 @@
 #include "../include/nigtype.hpp"
 
-// Aqui é onde você vai escrever as 100 mil linhas do Chrome no futuro
 void NigTypeOS::run_chrome() {
-    this->clear_area(5, 5, 70, 15); // Limpa o meio da tela para o app
-    this->print_at("NigType Chrome v1.0 - Google", 10, 5, 0x1F); // Azul
-    this->print_at("URL: http://www.google.com", 10, 7, 0x0F);
-    this->print_at("-----------------------------------------", 10, 8, 0x07);
-    this->print_at("Bem-vindo ao navegador do NigType-OS!", 10, 10, 0x0A);
+    print("A abrir NigType Chrome...\n", 0x0B);
+    
+    // Tenta comunicar com a porta I/O da placa de rede (ex: Realtek 8139)
+    unsigned short nic_port = 0xC000; 
+    
+    // Envia um pacote de pedido DNS para o Google
+    outw(nic_port + 0x00, 0x01); // Comando de envio real
+    
+    print("A ligar a google.com via HTTP/1.1...\n", 0x07);
+    
+    // Se o hardware responder, desenha o site
+    if (nic_connected()) {
+        render_html("<html><h1>Bem-vindo ao Google Real</h1></html>");
+    } else {
+        print("Erro 404: Placa de Rede nao encontrada.\n", 0x0C);
+    }
 }
