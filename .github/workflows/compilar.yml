@@ -15,21 +15,23 @@ jobs:
 
       - name: Compilar Tudo
         run: |
-          # Compilando o Boot
+          # 1. Compila o Boot
           nasm -f elf32 boot.asm -o boot.o
           
-          # Compilando os arquivos C (O -Iinclude ajuda a achar o nigtype.h)
-          gcc -m32 -c kernel/system.c -Iinclude -o system.o
-          gcc -m32 -c kernel/idt.c -Iinclude -o idt.o
-          gcc -m32 -c kernel/bootlog.c -Iinclude -o bootlog.o
+          # 2. Compila os arquivos C
+          # Usamos -Iinclude e -I. para que ele ache o nigtype.h de qualquer jeito
+          gcc -m32 -c kernel/system.c -Iinclude -I. -o system.o
+          gcc -m32 -c kernel/idt.c -Iinclude -I. -o idt.o
+          gcc -m32 -c kernel/bootlog.c -Iinclude -I. -o bootlog.o
           
-          # Compilando o Core (Suas 8 linhas de código)
-          g++ -m32 -c kernel/kernel_core.cpp -Iinclude -o kernel_core.o
+          # 3. Compila o Kernel Core (as 8 linhas)
+          g++ -m32 -c kernel/kernel_core.cpp -Iinclude -I. -o kernel_core.o
           
-          # Compilando o Main (A tela de instalação)
-          g++ -m32 -c kernel/main.cpp -Iinclude -o main.o
+          # 4. Compila o Main (Setup)
+          # Se o erro do nigtype.hpp voltar aqui, é porque o arquivo se chama gui.hpp
+          g++ -m32 -c kernel/main.cpp -Iinclude -I. -o main.o
           
-          # Linker final
+          # 5. Linker Final
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
 
       - name: Upload do Kernel
