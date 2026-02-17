@@ -15,17 +15,23 @@ jobs:
 
       - name: Compilar Tudo
         run: |
-          # 1. Assembly (ELF32 para aceitar os símbolos)
+          # 1. Traz tudo para a raiz para evitar erro de pasta
+          cp kernel/*.c .
+          cp kernel/*.cpp .
+          cp include/*.h .
+          cp include/*.hpp .
+          
+          # 2. Compila o Assembly
           nasm -f elf32 boot.asm -o boot.o
           
-          # 2. Compilar C (O -I${{ github.workspace }}/include força o caminho real)
-          gcc -m32 -c kernel/system.c -I${{ github.workspace }}/include -o system.o
-          gcc -m32 -c kernel/idt.c -I${{ github.workspace }}/include -o idt.o
-          gcc -m32 -c kernel/bootlog.c -I${{ github.workspace }}/include -o bootlog.o
+          # 3. Compila C (Agora sem caminho de pasta, direto no arquivo)
+          gcc -m32 -c system.c -I. -o system.o
+          gcc -m32 -c idt.c -I. -o idt.o
+          gcc -m32 -c bootlog.c -I. -o bootlog.o
           
-          # 3. Compilar C++
-          g++ -m32 -c kernel/main.cpp -I${{ github.workspace }}/include -o main.o
-          g++ -m32 -c kernel/kernel_core.cpp -I${{ github.workspace }}/include -o kernel_core.o
+          # 4. Compilar C++
+          g++ -m32 -c main.cpp -I. -o main.o
+          g++ -m32 -c kernel_core.cpp -I. -o kernel_core.o
           
-          # 4. Linker
+          # 5. O Linker (Junta tudo)
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
