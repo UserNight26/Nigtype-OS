@@ -1,5 +1,5 @@
-#include "nigtype.hpp"
-#include "nigtype.h"
+#include "gui.hpp"      // Em vez de nigtype.hpp
+#include "nigtype.h"    // Este aqui está certo!
 extern "C" void kernel_main() {
     NigTypeOS os;
     
