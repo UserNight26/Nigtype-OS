@@ -13,25 +13,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nasm gcc g++ binutils
 
-      - name: Compilar Tudo
+    - name: Compilar Tudo
         run: |
-          # 1. Traz tudo para a raiz para evitar erro de pasta
+          # 1. Copia o que REALMENTE existe na pasta
           cp kernel/*.c .
           cp kernel/*.cpp .
-          cp include/*.h .
-          cp include/*.hpp .
+          cp include/gui.hpp .   # Nome real do arquivo!
+          cp include/nigtype.h . # Nome real do arquivo!
           
-          # 2. Compila o Assembly
+          # 2. Compila o Boot
           nasm -f elf32 boot.asm -o boot.o
           
-          # 3. Compila C (Agora sem caminho de pasta, direto no arquivo)
+          # 3. Compila C
           gcc -m32 -c system.c -I. -o system.o
           gcc -m32 -c idt.c -I. -o idt.o
           gcc -m32 -c bootlog.c -I. -o bootlog.o
           
-          # 4. Compilar C++
-          g++ -m32 -c main.cpp -I. -o main.o
-          g++ -m32 -c kernel_core.cpp -I. -o kernel_core.o
+          # 4. Compila o Core (8 linhas)
+          g++ -m32 -c kernel_core.cpp -o kernel_core.o
           
-          # 5. O Linker (Junta tudo)
+          # 5. Compila o Main (Ajustado para os nomes certos)
+          g++ -m32 -c main.cpp -I. -o main.o
+          
+          # 6. Linker
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
