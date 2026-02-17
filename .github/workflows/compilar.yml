@@ -1,0 +1,26 @@
+name: Gerar Release Automático
+
+on:
+  push:
+    branches: [ main ] # Ou 'master', dependendo da tua branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Instalar NASM
+        run: sudo apt-get install -y nasm
+
+      - name: Compilar NigType-OS
+        run: nasm -f bin boot.asm -o nigtype.img
+
+      - name: Criar Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v0.1.0-alpha
+          name: Release v0.1.0-alpha "Genesis"
+          files: nigtype.img
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
