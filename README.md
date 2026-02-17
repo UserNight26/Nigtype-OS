@@ -7,7 +7,6 @@
 O **NigType-OS** é um sistema operacional x86 de 32 bits desenvolvido do zero. Focado em uma arquitetura de **Frames Modulares**, ele ignora padrões comerciais para criar uma experiência de usuário bruta e autêntica.
 
 
-qemu-system-i386 -drive format=raw,file=nigtype.img
 
 ---
 
