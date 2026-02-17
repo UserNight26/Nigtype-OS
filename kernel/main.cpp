@@ -1,5 +1,5 @@
-#include "../include/nigtype.hpp"
-#include "../include/nigtype.h"
+#include "include/nigtype.hpp"
+#include "include/nigtype.h"
 
 extern "C" void kernel_main() {
     NigTypeOS os;
