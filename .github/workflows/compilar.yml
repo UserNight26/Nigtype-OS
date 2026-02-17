@@ -13,13 +13,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nasm gcc g++ binutils
 
-    - name: Compilar Tudo
+      - name: Compilar Tudo
         run: |
-          # 1. Copia o que REALMENTE existe na pasta
+          # 1. Copia os arquivos reais
           cp kernel/*.c .
           cp kernel/*.cpp .
-          cp include/gui.hpp .   # Nome real do arquivo!
-          cp include/nigtype.h . # Nome real do arquivo!
+          cp include/gui.hpp .
+          cp include/nigtype.h .
           
           # 2. Compila o Boot
           nasm -f elf32 boot.asm -o boot.o
@@ -29,11 +29,19 @@ jobs:
           gcc -m32 -c idt.c -I. -o idt.o
           gcc -m32 -c bootlog.c -I. -o bootlog.o
           
-          # 4. Compila o Core (8 linhas)
+          # 4. Compila o Core (As 8 linhas)
           g++ -m32 -c kernel_core.cpp -o kernel_core.o
           
-          # 5. Compila o Main (Ajustado para os nomes certos)
+          # 5. Compila o Main (O Setup)
           g++ -m32 -c main.cpp -I. -o main.o
           
-          # 6. Linker
+          # 6. Linker (A hora da verdade!)
           ld -m elf_i386 -Ttext 0x100000 boot.o system.o idt.o bootlog.o main.o kernel_core.o -o nigtype.bin
+
+      - name: Upload do Kernel
+        uses: actions/upload-artifact@v4
+        with:
+          name: NigType-Kernel-Binario
+          path: nigtype.bin
+
+          
