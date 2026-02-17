@@ -175,13 +175,14 @@ O **NigType-OS** é um sistema operativo independente, focado em alta performanc
 O **NigType-OS** já está disponível para testes em hardware real e emuladores. Esta build contém o núcleo estável do sistema.
 
 ### 📦 v0.1.0-alpha "Genesis"
-> **Data de Lançamento:** 17 de Fevereiro de 2026
+**Data de Lançamento:** 17 de Fevereiro de 2026
 
-| Artefato | Link de Download | Tipo |
+| Artefato | Link de Download | Tipo de Arquivo |
 | :--- | :--- | :--- |
-| **NigType IMG** | [**nigtype_v0.1.0.img**](https://github.com/UserNight26/NigType-OS/releases/download/v0.1.0-alpha/nigtype.img) 
-| **NigType ISO** | [**nigtype_v0.1.0.iso**](https://github.com/UserNight26/NigType-OS/releases/download/v0.1.0-alpha/nigtype.iso) 
+| **NigType IMG** | [nigtype.img](https://github.com/UserNight26/NigType-OS/releases/download/v0.1.0-alpha/nigtype.img) | Imagem Raw (Pendrive/QEMU) |
+| **NigType ISO** | [Em breve] | Imagem de CD (VirtualBox) |
 
+---
 #### 🛠️ O que há de novo:
 * **Kernel Core:** Inicialização bem-sucedida em Modo Protegido (32-bit).
 * **VGA Graphics:** Engine de renderização de Frames Geométricos ativada.
